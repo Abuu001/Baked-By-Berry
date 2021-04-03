@@ -1,10 +1,12 @@
 import React from 'react'
 import { useStateValue } from '../../ContextAPI/StateProvider'
 import "./Product.css"
+import { useAlert } from "react-alert";
 
 function Product({title,image,price,rating,alternative,id}) {
 
     const [{basket},dispatch] = useStateValue();
+    const alert = useAlert();
 
     const addToBasket=()=>{
         dispatch({
@@ -18,6 +20,8 @@ function Product({title,image,price,rating,alternative,id}) {
                 id
             }
         })
+
+        alert.success("An item is Added!");
     }
 
     return (

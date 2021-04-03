@@ -9,6 +9,7 @@ import Register from './components/Register/Register';
 import { useEffect } from 'react';
 import { auth } from './firebase';
 import { useStateValue } from './components/ContextAPI/StateProvider';
+import Payment from './components/Checkout/Subtotal/Payment/Payment';
 
 function App() {
 
@@ -51,6 +52,11 @@ function App() {
           <Route path="/checkout">
             <TopBar /> 
              <Checkout />
+          </Route>
+
+          <Route path="/payment">
+            <TopBar /> 
+             <Payment />
           </Route>
 
           <Route path="/">

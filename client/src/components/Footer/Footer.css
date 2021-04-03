@@ -18,7 +18,7 @@
 .footer__socialmedia{
  width: 80%;
 }
-.copyrights,.footer__socialmedia >p,a{
+.copyrights>p,.footer__socialmedia >p,a{
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -27,6 +27,7 @@
     color: white;
     font-size: 12px;
     padding-bottom: 9px;
+    text-decoration: none;
 }
  
 .footer__socialmedia>p:hover, .copyrights >p:hover{

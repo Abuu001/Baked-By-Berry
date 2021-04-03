@@ -1,13 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "./TopBar.css"
 import SearchIcon from '@material-ui/icons/Search';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import { Link } from 'react-router-dom';
 import { useStateValue } from '../ContextAPI/StateProvider';
+import { auth } from '../../firebase';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 function TopBar() {
 
-    const [{basket},dispatch] = useStateValue(); 
+    const [{basket,user},dispatch] = useStateValue(); 
+    const [openSidebar,setOpenSidebar] = useState(false);
+    
+
+    const handleSignout=()=>{
+        if(user){
+            auth.signOut();
+        }
+    }
+
+    const sidebarNav=()=>{
+        setOpenSidebar(prev=>!openSidebar)
+
+        //checks if window is > 502 px set opensidebar to close automatically 
+   //     window.innerWidth > 502 ?  setOpenSidebar(false) : openSidebar     
+    }
+
+    useEffect(()=>{
+        if( window.innerWidth > 502){
+            setOpenSidebar(false) 
+            console.log("hey")
+        }
+        console.log(window.innerWidth)
+        return()=>{
+             
+        }
+    },[window.innerWidth])
     return (
         <div className="TopBar">
 
@@ -21,16 +50,24 @@ function TopBar() {
                 <div className="header__search">
                     <input   className="header__searchInput" type="text"/>
                     <SearchIcon  className="header__searchIcon" />
+
+                    <Link to="/checkout">
+                        <div className="header__optionBasket">
+                            <AddShoppingCartIcon />
+                            <span className="header__optionLineTwo   header__basketCount">{basket?.length || 0}</span>
+                        </div>
+                    </Link>
+                    <MoreVertIcon  className="more__Icon" onClick={sidebarNav}  fontSize="large"/>
                 </div>
             </div>
 
             <div className="section2">
 
                 <nav className="header__nav">
-                    <Link  to="/login">
-                        <div className="header__option">
-                                <span className="header__optionLineOne">Hello Guest</span>
-                                <span className="header__optionLineTwo">Sign In</span>
+                    <Link  to={!user  && "/login"}>
+                        <div className="header__option" onClick={handleSignout}>
+                                <span className="header__optionLineOne">Hello  {user?.email || 'Guest'}</span>
+                                <span className="header__optionLineTwo">{user ?  'Sign Out' : 'Sign In' }</span>
                         </div>             
                     </Link>
 
@@ -44,14 +81,43 @@ function TopBar() {
                             <span className="header__optionLineTwo">Prime</span>
                     </div>
 
-                    <Link to="/checkout">
-                        <div className="header__optionBasket">
-                            <AddShoppingCartIcon />
-                            <span className="header__optionLineTwo   header__basketCount">{basket?.length }</span>
-                        </div>
-                    </Link>
                 </nav>
             </div>
+
+        { openSidebar ?
+                                  <div className="section3">
+                                  <aside>
+                                  <ArrowBackIosIcon  className="more__Icon" onClick={sidebarNav} />
+                                      <div className="section3__contents"> 
+                                      
+                                          <Link  to={!user  && "/login"}>
+                                            <div className="sidebar__option" onClick={handleSignout}>
+                                                    <span className="sidebar__optionLineOne">Hello {user?.email || 'Guest'}</span>
+                                                    <span className="sidebar__optionLineTwo">{user ?  'Sign Out' : 'Sign In' }</span>
+                                            </div>             
+                                          </Link>
+
+                                          <div className="sidebar__option">
+                                                <span className="sidebar__optionLineOne">Returns</span>
+                                                <span className="sidebar__optionLineTwo">Orders</span>
+                                        </div>
+                                         
+                                        <div className="sidebar__option">
+                                            <span className="sidebar__optionLineOne">Your</span>
+                                                <span className="sidebar__optionLineTwo">Prime</span>
+                                        </div>
+
+                                            <Link to="/checkout">
+                                                <div className="sidebar__option">
+                                                    <span className="sidebar__optionLineOne">Shopping Cart</span>
+                                                        <span className="sidebar__optionLineTwo">   <AddShoppingCartIcon /></span>
+                                                </div>
+                                            </Link>
+                                 
+                                      </div>
+                                  </aside>
+                              </div>
+                            :  null  }
         </div>
     )
 }

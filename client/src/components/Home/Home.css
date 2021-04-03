@@ -4,6 +4,9 @@
     margin-left: auto;
     margin-right: auto;
     max-width: 1500px;
+    
+    /* position: relative;
+    top: 0; */
  
 }
 .home__row{
@@ -19,8 +22,14 @@
     z-index: -1;
     margin-top: -220px;
     mask-image: linear-gradient(to bottom, rgba(0,0,0,1),rgba(0,0,0,0));
+    position: fixed;
 }
-
+.home__products__container{
+    position: relative;
+    top: 145px;
+    /* position: absolute;
+    top: 393px; */
+}
 @media (max-width:500px){
     .home__image{
         margin-top: -60px;

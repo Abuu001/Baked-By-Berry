@@ -67,6 +67,36 @@
     margin-right: 10px;
     font-size: 25px;
 }
+.more__Icon{
+    display: none;
+   visibility: hidden;
+}
+.section3{
+    width: 334px;
+    height: fit-content;
+    position: fixed;
+    top: 70px;
+    z-index: 1;
+    border-radius: 3px;
+    padding-left: 5px;
+    background-color: #131921;
+}
+.sidebar__option{
+    color: #f0c14b;
+    font-weight: 600;
+    cursor: pointer;
+}
+.sidebar__option:hover{
+    background-color:white ;
+    color: black;
+}
+.sidebar__optionLineOne{
+    padding-right: 12px;
+}
+.sidebar__optionLineOne,.sidebar__optionLineTwo{
+    font-size: 18px;
+}
+
 
 @media (max-width:500px){
     .TopBar{
@@ -80,5 +110,20 @@
         font-size: 21px;
         font-weight: 800;
     }
+    .more__Icon{
+        display: inline;
+        visibility: visible;
+        color: #f0c14b !important;
+        font-weight: 800 !important;
+        cursor: pointer;
+    }
+    .section2{
+        display: none;
+        visibility: hidden;
+    }
+    .section3{
+        top: 120px;
+    }
  
 }
+

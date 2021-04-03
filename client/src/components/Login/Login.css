@@ -5,8 +5,24 @@
     height: 100vh;
     background-color: white;
 }
+#orwithGoogle{
+    margin-left: auto;
+    margin-right: auto;
+}
+.GoogleIcon{
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   margin-left: auto;
+   margin-right: auto;
+   width: 40%;
+   justify-content: space-between;
+}
+#spinner{
+    display: flex;
+}
 .login__logo{
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 5px;
     object-fit: contain;
     margin-right: auto;
@@ -31,10 +47,10 @@
 }
 .login__container>h1{
     font-weight: 500;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .login__container>form>h5{
-    margin-bottom: 5px;
+    margin-bottom: 2px;
 }
 .login__container>form>input{
     height: 30px;
@@ -44,7 +60,7 @@
 }
 
 .login__container >p {
-    margin-top: 15px;
+    margin-top: 10px;
     font-size: 12px;
 }
 .login__signInBtn{
@@ -63,4 +79,7 @@
     margin-top: 10px;
     color: #111;
     cursor: pointer;
+}
+.go__back{
+    color: black;
 }

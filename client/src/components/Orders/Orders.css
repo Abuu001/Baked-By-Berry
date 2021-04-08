@@ -1,0 +1,8 @@
+.Orders>p{
+    margin: auto;
+    font-size: 45px;
+}
+.Orders>p>span{
+    color: red;
+    font-weight: 800;
+}

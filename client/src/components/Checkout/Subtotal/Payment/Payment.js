@@ -1,11 +1,83 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useStateValue } from '../../../ContextAPI/StateProvider';
 import CheckoutProduct from '../../CheckoutProduct/CheckoutProduct';
 import "./Payment.css"
+import {
+    CardElement,
+    Elements,
+    useStripe,
+    useElements,
+  } from '@stripe/react-stripe-js';
+import CurrencyFormat from 'react-currency-format';
+import { getBasketTotal } from '../../../ContextAPI/reducer';
+import axios from 'axios';
+import { useHistory } from 'react-router';
+import { db } from '../../../../firebase';
  
 function Payment() {
 
+    let history= useHistory()
+    const stripe =useStripe();
+    const elements=useElements();
     const [{basket,user},dispatch] = useStateValue();
+    const [error,setError]=useState(null);
+    const [disabled,setDisabled]=useState(true)
+    const [suceeded,setSuceeded]=useState(false);
+    const [processing,setProcessing]=useState("");
+    const [clientSecret,setClientSecret]=useState(true);
+
+    useEffect(() => {
+        //generate special stripe secret which allows us to cahrge
+         
+        const getClientSecret =async()=>{
+            const response = await axios({
+                method : 'post',
+                //stripe expects the total in a currency subunits 
+                url : `/payments/create?total=${getBasketTotal(basket) * 100}`
+            })
+
+            setClientSecret(response.data.clientSecret)
+        }
+    }, [basket])
+
+    const handleSubmit=async(event)=>{
+        event.preventDefault();
+        history.push('/orders')
+
+        setProcessing(true);
+        const payload = await stripe.confirmCardPayment(clientSecret,{
+            payment_method:{
+                card:elements.getElement(CardElement)
+            }
+        }).then(({paymentIntent})=>{
+            //paymentIntent is the payment confirmation
+            db.collection('users')
+                .doc(user?.uid)
+                .collection('orders')
+                .doc(paymentIntent.id)
+                .set({
+                    basket : basket,
+                    amount : paymentIntent.amount,
+                    created : paymentIntent.created
+                })
+
+            setSuceeded(true)
+            setError(null)
+            setProcessing(false)
+
+            dispatch({
+                type : "EMPTY_BASKET"
+            })
+
+        })
+      
+    }
+
+    const handleChange=(event)=>{
+        setDisabled(event.empty);
+        setError(event.error ? event.error.message : "")
+    }
+
     return (
         <div className="Payment">
              <div className="payment__container">
@@ -46,7 +118,24 @@ function Payment() {
                     </div>
                     <h3>Payment Method</h3>
                     <div className="payment__details">
+                        <form onSubmit={handleSubmit}>
+                            <CardElement onChange={handleChange} />
+                            <div className="payment__price__container">
+                                <CurrencyFormat
+                                        renderText={value=>(
+                                                <h3>Order Total :  {value} </h3>
+                                        )} 
+                                        decimalScale={2} 
+                                        value={getBasketTotal(basket)}
+                                        displayType="text"
+                                        thousandSeparator={true}
+                                        prefix={"$"}  
+                                     />
+                                     <button disabled={processing || disabled || suceeded}> <span>{processing ? <p>Processing</p> : "Buy now" }</span></button>
+                            </div>
 
+                            {error && <div>{error}</div> }
+                        </form>
                     </div>
                 </div>
              </div>

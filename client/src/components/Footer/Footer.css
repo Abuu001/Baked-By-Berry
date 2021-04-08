@@ -30,6 +30,7 @@
     text-decoration: none;
 }
  
+ 
 .footer__socialmedia>p:hover, .copyrights >p:hover{
     color: rgb(255, 0, 140);
 }
